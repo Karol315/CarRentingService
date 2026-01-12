@@ -1,0 +1,21 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header bg-primary text-white">Logowanie</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Zaloguj się</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                Nie masz konta? <a href="{% url 'signup' %}">Zarejestruj się</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

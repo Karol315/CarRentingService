@@ -1,0 +1,30 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Nasza Flota</h1>
+    
+    <div class="row">
+        {% for car in cars %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if car.image %}
+                    <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.model }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">Brak zdjęcia</div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+                    <p class="card-text">
+                        <strong>Kategoria:</strong> {{ car.category.name }}<br>
+                        <strong>Cena:</strong> {{ car.price_per_day }} PLN / dzień
+                    </p>
+                    <a href="{% url 'car_detail' car.pk %}" class="btn btn-primary w-100">Szczegóły</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p>Brak samochodów w ofercie lub nie są one oznaczone jako dostępne.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

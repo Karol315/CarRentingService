@@ -1,0 +1,37 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+<h2>Moje Rezerwacje</h2>
+
+{% if rentals %}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Samochód</th>
+                <th>Od</th>
+                <th>Do</th>
+                <th>Koszt</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in rentals %}
+            <tr>
+                <td>{{ rental.car.brand }} {{ rental.car.model }}</td>
+                <td>{{ rental.start_date }}</td>
+                <td>{{ rental.end_date }}</td>
+                <td>{{ rental.total_cost }} PLN</td>
+                <td>
+                    {% if rental.insurance_accepted %}
+                        <span class="badge bg-info">Ubezpieczony</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="mt-4">Nie masz jeszcze żadnych rezerwacji.</p>
+    <a href="{% url 'car_list' %}" class="btn btn-primary">Wybierz auto</a>
+{% endif %}
+{% endblock %}

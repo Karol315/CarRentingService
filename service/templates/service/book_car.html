@@ -1,0 +1,54 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+<h2>Rezerwacja: {{ car.brand }} {{ car.model }}</h2>
+<p>Cena za dobę: <strong>{{ car.price_per_day }} PLN</strong></p>
+
+<div class="alert alert-secondary fw-bold" id="total-cost-display">
+    Wybierz termin rezerwcji
+</div>
+
+<input type="hidden" id="car-id-hidden" value="{{ car.id }}">
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Proszę poprawić błędy w formularzu.
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label>Data odbioru:</label>
+                {{ form.start_date }}
+                <div class="text-danger">{{ form.start_date.errors }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label>Data zwrotu:</label>
+                {{ form.end_date }}
+                <div class="text-danger">{{ form.end_date.errors }}</div>
+            </div>
+
+            <div class="mb-3 form-check">
+                {{ form.insurance_accepted }}
+                <label class="form-check-label">Dodatkowe ubezpieczenie (+50 PLN)</label>
+            </div>
+            <div class="mb-3">
+                <label>Metoda płatności:</label>
+                {{ form.payment_method }}
+            </div>
+
+            <div class="mb-3">
+                <label>Uwagi:</label>
+                {{ form.notes }}
+            </div>
+
+            <button type="submit" class="btn btn-success">Zatwierdź rezerwację</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
