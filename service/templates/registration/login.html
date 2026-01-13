@@ -2,18 +2,48 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card mt-5">
+    <div class="col-md-9">
+        <div class="card mt-5 shadow border-0">
             <div class="card-header bg-primary text-white">Logowanie</div>
             <div class="card-body">
-                <form method="post">
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors.0 }}</div>
+                {% endif %}
+
+                <form method="post" novalidate>
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary w-100">Zaloguj się</button>
+                    {% for field in form %}
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-md-3 text-end fw-bold">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        </div>
+                        <div class="col-md-5">
+                            {{ field }}
+                        </div>
+                        <div class="col-md-4">
+                            <span id="{{ field.auto_id }}_error" class="text-danger small fw-bold">
+                                {{ field.errors.0 }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="row mb-3">
+                        <div class="col-md-5 offset-md-3 text-end">
+                            <a href="{% url 'password_reset' %}" class="text-decoration-none small text-secondary">Zapomniałeś hasła?</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 offset-md-3">
+                            <button type="submit" class="btn btn-primary w-100">Zaloguj się</button>
+                        </div>
+                    </div>
                 </form>
             </div>
-            <div class="card-footer text-center">
-                Nie masz konta? <a href="{% url 'signup' %}">Zarejestruj się</a>
+            <div class="card-footer text-center bg-white border-0">
+                Nie masz konta? <a href="{% url 'signup' %}" class="fw-bold">Zarejestruj się</a>
             </div>
         </div>
     </div>

@@ -2,14 +2,35 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card mt-5">
+    <div class="col-md-10">
+        <div class="card mt-5 shadow border-0">
             <div class="card-header bg-success text-white">Rejestracja</div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" novalidate>
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-success w-100">Załóż konto</button>
+                    {% for field in form %}
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-md-3 text-end fw-bold">
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}{% if field.field.required %}*{% endif %}:
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            {{ field }}
+                        </div>
+                        <div class="col-md-4">
+                            <span id="{{ field.auto_id }}_error" class="text-danger small fw-bold">
+                                {{ field.errors.0 }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="row mt-4">
+                        <div class="col-md-5 offset-md-3">
+                            <button type="submit" class="btn btn-success w-100">Załóż konto</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

@@ -135,3 +135,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Reset hasła (wypisanie do konsoli zamiast wysyłki)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+AUTHENTICATION_BACKENDS = [
+    'service.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
