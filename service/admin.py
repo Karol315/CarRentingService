@@ -20,5 +20,4 @@ class RentalAdmin(admin.ModelAdmin):
 
 admin.site.register(Category)
 admin.site.register(UserProfile)
-# CarColor nie musi być rejestrowany oddzielnie, bo jest w Car, ale można:
 admin.site.register(CarColor)

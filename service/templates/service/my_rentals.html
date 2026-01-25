@@ -1,37 +1,83 @@
 {% extends 'service/base.html' %}
 
 {% block content %}
-<h2>Moje Rezerwacje</h2>
+<div class="mt-5">
 
-{% if rentals %}
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>Samochód</th>
-                <th>Od</th>
-                <th>Do</th>
-                <th>Koszt</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for rental in rentals %}
-            <tr>
-                <td>{{ rental.car.brand }} {{ rental.car.model }}</td>
-                <td>{{ rental.start_date }}</td>
-                <td>{{ rental.end_date }}</td>
-                <td>{{ rental.total_cost }} PLN</td>
-                <td>
-                    {% if rental.insurance_accepted %}
-                        <span class="badge bg-info">Ubezpieczony</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p class="mt-4">Nie masz jeszcze żadnych rezerwacji.</p>
-    <a href="{% url 'car_list' %}" class="btn btn-primary">Wybierz auto</a>
-{% endif %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 fw-bold" style="color: var(--color-text-muted);">Moje rezerwacje</h2>
+    </div>
+
+    {% if rentals %}
+        <div class="card border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr >
+                                <th class="text-muted ps-4">Samochód</th>
+                                <th class="text-muted">Termin</th>
+                                <th class="text-muted">Koszt</th>
+                                <th class="text-muted">Status</th>
+                                <th class="text-muted text-center">Akcje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rental in rentals %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        {% if rental.car.image %}
+                                            <img src="{{ rental.car.image.url }}" alt="Auto" class="rounded me-3"
+                                                 style="width: 50px; height: 35px; object-fit: cover; border: 1px solid var(--color-border-subtle);">
+                                        {% else %}
+                                            <div class="rounded d-flex align-items-center justify-content-center me-3"
+                                                 style="width: 50px; height: 35px; background-color: rgba(255,255,255,0.05); color: var(--color-text-muted);">
+                                                <i class="bi bi-car-front"></i>
+                                            </div>
+                                        {% endif %}
+
+                                        <div>
+                                            <div class="fw-bold text-muted">{{ rental.car.brand }} {{ rental.car.model }}</div>
+                                            <small style="color: var(--color-text-muted);">{{ rental.car_color.name }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-muted fw-bold">{{ rental.start_date|date:"d.m.Y" }}</span>
+                                        <small style="color: var(--color-text-muted);">do {{ rental.end_date|date:"d.m.Y" }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="color: var(--color-accent);" class="fw-bold">{{ rental.total_cost }} PLN</span>
+                                </td>
+                                <td>
+                                    {% now "Y-m-d" as todays_date %}
+                                    {% if rental.end_date|date:"Y-m-d" < todays_date %}
+                                        <span class="text-muted">Zakończona</span>
+                                    {% elif rental.start_date|date:"Y-m-d" <= todays_date %}
+                                        <span class="text-muted">W trakcie</span>
+                                    {% else %}
+                                        <span class="text-muted">Nadchodząca</span>
+                                    {% endif %}
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <a href="{% url 'rental_edit' rental.id %}" class="btn btn-sm btn-outline-primary">
+                                        Szczegóły
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <h4 style="color: var(--color-text-muted);">Brak rezerwacji</h4>
+            <a href="{% url 'car_list' %}" class="btn btn-primary mt-3">Przejdź do oferty</a>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

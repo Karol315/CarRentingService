@@ -1,0 +1,77 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Rezerwacja #{{ rental.id }}</h4>
+            <a href="{% url 'my_rentals' %}" class="btn btn-sm btn-outline-light">Powrót</a>
+        </div>
+        <div class="card-body">
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    {% if rental.car.image %}
+                        <img src="{{ rental.car.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ rental.car.brand }}">
+                    {% else %}
+                        <div class="bg-light text-center p-5 rounded">Brak zdjęcia</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <h3 class="text-primary">{{ rental.car.brand }} {{ rental.car.model }}</h3>
+                    <div class="row mt-3">
+                        <div class="col-sm-6">
+                            <p><strong>Termin:</strong> {{ rental.start_date|date:"d.m.Y" }} - {{ rental.end_date|date:"d.m.Y" }}</p>
+                            <p><strong>Wariant:</strong> {{ rental.car_color.name }}</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p><strong>Ubezpieczenie:</strong>
+                                {% if rental.insurance_accepted %}TAK (+50 PLN){% else %}NIE{% endif %}
+                            </p>
+                            <p class="fs-5"><strong>Koszt:</strong> <span class="text-success fw-bold">{{ rental.total_cost }} PLN</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            {% if is_editable %}
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{{ form.notes.label }}</label>
+                        {{ form.notes }}
+                        <div class="form-text">Możesz zmienić uwagi do tej rezerwacji.</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button type="submit" name="save" class="btn btn-success px-4">
+                            Zapisz zmiany
+                        </button>
+
+                        <button type="submit" name="cancel" class="btn btn-danger px-4">
+                            Anuluj rezerwację
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <div>
+                        <strong>Edycja zablokowana.</strong><br>
+                        Rezerwacja już się rozpoczęła lub zakończyła. Nie można wprowadzać zmian ani jej anulować.
+                    </div>
+                </div>
+                {% if rental.notes %}
+                    <div class="mb-3">
+                        <strong>Twoje uwagi:</strong>
+                        <p class="p-2 bg-light border rounded">{{ rental.notes }}</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -147,6 +147,22 @@ function initBookingForm() {
     updateState();
 }
 
+function initEditForm() {
+    const cancelBtn = document.querySelector('button[name="cancel"]');
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function(e) {
+            // Wyświetlamy systemowe potwierdzenie
+            const confirmed = confirm("Czy na pewno chcesz anulować tę rezerwację?\n\nTej operacji nie można cofnąć!");
+
+            if (!confirmed) {
+                // Jeśli użytkownik kliknie "Anuluj", blokujemy wysłanie formularza
+                e.preventDefault();
+            }
+        });
+    }
+}
+
 /**
  * Walidacja Rejestracji (Hasła)
  */

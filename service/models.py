@@ -32,7 +32,6 @@ class Car(models.Model):
     def __str__(self):
         return f"{self.brand} {self.model}"
 
-    # Metoda pomocnicza: czy auto jest w ogóle dostępne (czy jakikolwiek kolor jest wolny)
     @property
     def is_fully_available(self):
         for color in self.colors.all():
@@ -46,7 +45,6 @@ class Car(models.Model):
 
 
 class CarColor(models.Model):
-    # ... (pola bez zmian: car, name, hex_code, quantity) ...
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='colors')
     name = models.CharField(max_length=50, verbose_name="Nazwa koloru")
     hex_code = models.CharField(max_length=7, verbose_name="Kod HEX", help_text="np. #FF0000")
@@ -57,15 +55,12 @@ class CarColor(models.Model):
 
     @property
     def active_rentals_count(self):
-        # Liczymy trwające wypożyczenia
         return self.rentals.filter(end_date__gte=timezone.now().date()).count()
 
     @property
     def available_quantity(self):
-        # To jest nowa metoda pomocnicza do szablonu
-        # Zwraca ile aut stoi na parkingu (Flota - Wypożyczone)
         count = self.quantity - self.active_rentals_count
-        return max(0, count) # Żeby nie wyszło ujemne
+        return max(0, count)
 
     @property
     def is_available(self):
@@ -75,7 +70,6 @@ class CarColor(models.Model):
 class Rental(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rentals', verbose_name="Użytkownik")
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='rentals', verbose_name="Samochód")
-    # Nowe pole - konkretny egzemplarz/kolor
     car_color = models.ForeignKey(CarColor, on_delete=models.CASCADE, related_name='rentals',
                                   verbose_name="Wybrany wariant", null=True)
 

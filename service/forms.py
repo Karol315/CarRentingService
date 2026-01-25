@@ -6,7 +6,6 @@ from .models import Rental, UserProfile, CarColor
 
 
 class RentalForm(forms.ModelForm):
-    # Domyślnie puste, uzupełniane w __init__
     car_color = forms.ModelChoiceField(
         queryset=CarColor.objects.none(),
         label="Wybierz wariant",
@@ -30,15 +29,12 @@ class RentalForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if car_id:
-            # Pobieramy kolory dla tego auta
             colors = CarColor.objects.filter(car_id=car_id)
             self.fields['car_color'].queryset = colors
 
-            # Formatowanie etykiety: "Czarny (Dostępne: 5)"
             self.fields['car_color'].label_from_instance = lambda \
-                obj: f"{obj.name} (Wolne: {obj.available_quantity} szt.)"
+                    obj: f"{obj.name} (Wolne: {obj.available_quantity} szt.)"
 
-            # Jeśli nie ma kolorów w bazie, pole będzie puste
             if not colors.exists():
                 self.fields['car_color'].widget.attrs['disabled'] = True
                 self.fields['car_color'].help_text = "Brak skonfigurowanych kolorów dla tego auta w bazie."
@@ -58,6 +54,18 @@ class RentalForm(forms.ModelForm):
         if chosen_color:
             if not chosen_color.is_available:
                 raise ValidationError(f"Wariant {chosen_color.name} jest niedostępny.")
+
+class RentalEditForm(forms.ModelForm):
+    class Meta:
+        model = Rental
+        fields = ['notes']
+        labels = {
+            'notes': 'Uwagi do rezerwacji'
+        }
+        widgets = {
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
 
 class RegisterForm(forms.Form):
     email = forms.EmailField(label="E-mail", widget=forms.TextInput(attrs={'class': 'form-control'}))

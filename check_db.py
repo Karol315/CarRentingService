@@ -1,4 +1,3 @@
-# check_db.py
 import os
 import django
 
@@ -10,7 +9,7 @@ from service.models import Car, CarColor
 print("--- DIAGNOSTYKA BAZY DANYCH ---")
 cars = Car.objects.all()
 if not cars.exists():
-    print("❌ BŁĄD: Brak samochodów w bazie (Tabela Car pusta).")
+    print("BŁĄD: Brak samochodów w bazie (Tabela Car pusta).")
 else:
     print(f"✅ Znaleziono {cars.count()} samochodów.")
     for car in cars:

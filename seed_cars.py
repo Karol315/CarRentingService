@@ -8,13 +8,11 @@ from service.models import Car, Category
 from django.core.files import File
 from django.conf import settings
 
-# Najpierw upewniamy się, że kategorie istnieją
 categories = {}
 for name in ["Sedan", "SUV", "Sport", "Limuzyna"]:
     cat, _ = Category.objects.get_or_create(name=name)
     categories[name] = cat
 
-# Dane samochodów
 auta = [
     ("Toyota", "Corolla", "Sedan", 2019, 150, "manual"),
     ("Toyota", "RAV4", "SUV", 2021, 220, "automatic"),
@@ -37,12 +35,12 @@ for marka, model, typ, rok, cena, skrzynia in auta:
     car = Car.objects.create(
         brand=marka,
         model=model,
-        category=categories[typ],  # <-- poprawnie instancja Category
+        category=categories[typ],
         production_year=rok,
         price_per_day=cena,
         gearbox=skrzynia,
         is_available=True,
-        description=f"Wyposażenie {marka} {model}"  # przykładowy opis
+        description=f"Wyposażenie {marka} {model}"
     )
 
     if os.path.exists(image_path):
