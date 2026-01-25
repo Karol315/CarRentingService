@@ -1,31 +1,53 @@
 {% extends 'service/base.html' %}
 
 {% block content %}
-<div class="card mb-3">
+<div class="card mb-3 shadow">
     <div class="row g-0">
         <div class="col-md-6">
             {% if car.image %}
-                <img src="{{ car.image.url }}" class="img-fluid rounded-start" alt="{{ car.model }}">
+                <img src="{{ car.image.url }}" class="img-fluid rounded-start h-100 object-fit-cover">
             {% else %}
-                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 100%; min-height: 300px;">Brak zdjęcia</div>
+                <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white" style="min-height: 300px;">Brak zdjęcia</div>
             {% endif %}
         </div>
         <div class="col-md-6">
             <div class="card-body">
                 <h2 class="card-title">{{ car.brand }} {{ car.model }}</h2>
-                <h4 class="text-primary">{{ car.price_per_day }} PLN <small class="text-muted">/ dzień</small></h4>
-                <hr>
-                <p class="card-text">{{ car.description }}</p>
-                <ul class="list-group list-group-flush mb-3">
-                    <li class="list-group-item"><strong>Rok produkcji:</strong> {{ car.production_year }}</li>
-                    <li class="list-group-item"><strong>Skrzynia biegów:</strong> {{ car.get_gearbox_display }}</li>
-                    <li class="list-group-item"><strong>Kategoria:</strong> {{ car.category.name }}</li>
-                </ul>
+                <span class="badge text-primary  mb-2">{{ car.category.name }}</span>
+                <span class="badge bg-secondary mb-2">{{ car.get_gearbox_display }}</span>
 
-                <div class="d-grid gap-2">
-                    <a href="{% url 'book_car' car.pk %}" class="btn btn-success btn-lg">Rezerwuj teraz</a>
-                    <a href="{% url 'car_list' %}" class="btn btn-outline-secondary">Wróć do listy</a>
+                <h4 class="text-primary fw-bold mt-3">{{ car.price_per_day }} PLN <small class="text-muted fs-6">/ doba</small></h4>
+
+                <hr>
+                <h5>Dostępne warianty:</h5>
+                <div class="d-flex flex-wrap gap-4 mb-4">
+                    {% for color in colors %}
+                        <div class="d-flex flex-column align-items-center p-2 border rounded bg-secondary">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background-color: {{ color.hex_code }}; border: 2px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" title="{{ color.name }}"></div>
+
+                            <div class="text-center mt-2">
+                                <strong class="d-block small">{{ color.name }}</strong>
+
+                                <span class="badge  {% if color.available_quantity > 0 %}bg-primary{% else %}bg-danger{% endif %} mt-1">
+                                    {{ color.available_quantity }} / {{ color.quantity }} szt.
+                                </span>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Brak zdefiniowanych kolorów.</p>
+                    {% endfor %}
                 </div>
+
+                <h5>Opis:</h5>
+                <p class="card-text">{{ car.description }}</p>
+
+                {% if car.is_fully_available %}
+                    <a href="{% url 'book_car' car.id %}" class="btn btn-primary btn-lg w-100 mt-3">Rezerwuj teraz</a>
+                {% else %}
+                    <button class="btn btn-secondary btn-lg w-100 mt-3" disabled>Tymczasowo niedostępny</button>
+                {% endif %}
+
+                <a href="{% url 'car_list' %}" class="btn btn-outline-secondary w-100 mt-2">Wróć do listy</a>
             </div>
         </div>
     </div>

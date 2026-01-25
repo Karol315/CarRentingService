@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', views.custom_login, name='login'),
     path('logout/', views.custom_logout, name='logout'),
     path('reset-password/', views.custom_password_reset, name='password_reset'),
+    path('reset-password-confirm/<str:email>/', views.custom_password_reset_confirm, name='password_reset_confirm'),
 
     # API
     path('api/cars/', views.api_car_list, name='api_car_list'),

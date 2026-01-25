@@ -1,14 +1,11 @@
 from rest_framework import serializers
-from .models import Car, Category
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id', 'name']
+from .models import Car
 
 class CarSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+    # Dodajemy pole, które jest wyliczane (property w modelu), a nie zapisane w bazie
+    is_fully_available = serializers.ReadOnlyField()
 
     class Meta:
         model = Car
-        fields = ['id', 'brand', 'model', 'production_year', 'price_per_day', 'is_available', 'category', 'image']
+        # Usuwamy 'is_available' z listy, dodajemy 'is_fully_available'
+        fields = ['id', 'brand', 'model', 'production_year', 'price_per_day', 'is_fully_available', 'image']

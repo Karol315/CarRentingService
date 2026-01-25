@@ -3,8 +3,8 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-9">
-        <div class="card mt-5 shadow border-0">
-            <div class="card-header bg-primary text-white">Logowanie</div>
+        <div class="card mt-5 shadow">
+            <div class="card-header">Logowanie</div>
             <div class="card-body">
 
                 {% if form.non_field_errors %}
@@ -15,23 +15,22 @@
                     {% csrf_token %}
                     {% for field in form %}
                     <div class="row mb-3 align-items-center">
-                        <div class="col-md-3 text-end fw-bold">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        <div class="col-md-3 text-end">
+                            <label class="form-label mb-0" for="{{ field.id_for_label }}">{{ field.label }}:</label>
                         </div>
                         <div class="col-md-5">
                             {{ field }}
                         </div>
                         <div class="col-md-4">
-                            <span id="{{ field.auto_id }}_error" class="text-danger small fw-bold">
+                            <div id="{{ field.auto_id }}_error" class="validation-placeholder">
                                 {{ field.errors.0 }}
-                            </span>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
 
                     <div class="row mb-3">
-                        <div class="col-md-5 offset-md-3 text-end">
-                            <a href="{% url 'password_reset' %}" class="text-decoration-none small text-secondary">Zapomniałeś hasła?</a>
+                        <div class="col-md-5 offset-md-3 text-start"> <a href="{% url 'password_reset' %}" class="small">Zapomniałeś hasła?</a>
                         </div>
                     </div>
 
@@ -42,8 +41,15 @@
                     </div>
                 </form>
             </div>
-            <div class="card-footer text-center bg-white border-0">
-                Nie masz konta? <a href="{% url 'signup' %}" class="fw-bold">Zarejestruj się</a>
+            <div class="card-footer border-0 pb-4 bg-transparent">
+                <div class="row">
+                    <div class="col-md-5 offset-md-3">
+                        <p class="mb-0">
+                            <span class="text-muted">Nie masz konta?</span>
+                            <a href="{% url 'signup' %}" class="fw-bold ms-1">Zarejestruj się</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

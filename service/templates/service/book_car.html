@@ -1,54 +1,90 @@
 {% extends 'service/base.html' %}
+{% load l10n %}
 
 {% block content %}
-<h2>Rezerwacja: {{ car.brand }} {{ car.model }}</h2>
-<p>Cena za dobę: <strong>{{ car.price_per_day }} PLN</strong></p>
+<div class="row justify-content-center">
+    <div class="col-md-8">
 
-<div class="alert alert-secondary fw-bold" id="total-cost-display">
-    Wybierz termin rezerwcji
-</div>
-
-<input type="hidden" id="car-id-hidden" value="{{ car.id }}">
-
-<div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            {% csrf_token %}
-            
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    Proszę poprawić błędy w formularzu.
+        <div class="card mb-4 border-primary shadow-sm">
+            <div class="card-body d-flex align-items-center justify-content-between" style="min-height: 110px;">
+                <div>
+                    <h4 class="mb-1 text-primary">{{ car.brand }} {{ car.model }}</h4>
+                    <div class="text-muted">Cena: <strong>{{ car.price_per_day }} PLN</strong> / doba</div>
                 </div>
-            {% endif %}
 
-            <div class="mb-3">
-                <label>Data odbioru:</label>
-                {{ form.start_date }}
-                <div class="text-danger">{{ form.start_date.errors }}</div>
+                <div class="text-end">
+                    <div class="text-muted small text-uppercase fw-bold mb-1">Do zapłaty</div>
+                    <div id="live-cost-display" class="fs-2 fw-bold text-primary">0.00 PLN</div>
+                    <div id="live-days-display" class="small text-muted">(wybierz daty)</div>
+                </div>
             </div>
+            <div id="car-price-data" data-price="{{ car.price_per_day|unlocalize }}"></div>
+        </div>
 
-            <div class="mb-3">
-                <label>Data zwrotu:</label>
-                {{ form.end_date }}
-                <div class="text-danger">{{ form.end_date.errors }}</div>
-            </div>
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <form method="post" novalidate id="booking-form">
+                    {% csrf_token %}
 
-            <div class="mb-3 form-check">
-                {{ form.insurance_accepted }}
-                <label class="form-check-label">Dodatkowe ubezpieczenie (+50 PLN)</label>
-            </div>
-            <div class="mb-3">
-                <label>Metoda płatności:</label>
-                {{ form.payment_method }}
-            </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label fw-bold">Data odbioru</label>
+                            {{ form.start_date }}
+                            <div class="validation-placeholder" id="start-error"></div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label fw-bold">Data zwrotu</label>
+                            {{ form.end_date }}
+                            <div class="validation-placeholder" id="end-error"></div>
+                        </div>
 
-            <div class="mb-3">
-                <label>Uwagi:</label>
-                {{ form.notes }}
-            </div>
+                        <div class="col-12 mb-2">
+                            <label class="form-label fw-bold">Wybierz wariant</label>
+                            {{ form.car_color }}
 
-            <button type="submit" class="btn btn-success">Zatwierdź rezerwację</button>
-        </form>
+                            {% if form.car_color.errors %}
+                                <div class="validation-placeholder">{{ form.car_color.errors.0 }}</div>
+                            {% else %}
+                                <div class="validation-placeholder" id="color-error"></div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <div class="form-check">
+                                {{ form.insurance_accepted }}
+                                <label class="form-check-label fw-bold" for="{{ form.insurance_accepted.id_for_label }}">
+                                    Dodatkowe ubezpieczenie (+50 PLN)
+                                </label>
+                            </div>
+                            <div class="validation-placeholder"></div>
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            <label class="form-label fw-bold">Metoda płatności</label>
+                            {{ form.payment_method }}
+                            <div class="validation-placeholder"></div>
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            <label class="form-label fw-bold">Uwagi</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger mt-3">
+                            {{ form.non_field_errors.0 }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 mt-2">
+                        <button type="submit" class="btn btn-success btn-lg" id="submit-btn" disabled>Potwierdź rezerwację</button>
+                        <a href="{% url 'car_detail' car.id %}" class="btn btn-outline-secondary">Anuluj</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
 {% endblock %}

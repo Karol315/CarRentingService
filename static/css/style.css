@@ -1,42 +1,274 @@
-/* Ogólne style */
+/* =========================================
+   1. ZMIENNE (DEFINICJA KOLORÓW)
+   ========================================= */
+:root {
+    /* TŁO */
+    --color-bg-body: #e6e9ec;
+
+    /* KONTENERY */
+    --color-bg-container: #27313d;   /* grafit z nutą niebieskiego */
+    --color-border-subtle: #344252;  /* chłodniejsza ramka */
+
+
+    /* AKCENT */
+    --color-accent: #2f99e5;
+    --color-accent-hover: #2d8fd5;
+
+    /* TEKST */
+    --color-text-light: #f5f7fa;
+    --color-text-dark: #1f2328;
+    --color-text-muted: #6b7280;
+
+    /* FORMULARZE */
+    --color-input-bg: #e6e9ec;
+    --color-input-border: #b5bcc4;
+
+    /* STANY */
+    --color-error: #d9534f;
+}
+
+/* =========================================
+   2. USTAWIENIA BAZOWE
+   ========================================= */
 body {
-    background-color: #f8f9fa;
+    background-color: var(--color-bg-body) !important;
+    color: var(--color-text-dark);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
 }
 
+/* =========================================
+   3. UKŁAD (LAYOUT)
+   ========================================= */
+.container-custom {
+    width: 100%;
+    padding: 0 1rem;
+    margin: 0 auto;
+}
+@media (min-width: 992px) {
+    .container-custom { max-width: 70%; }
+}
+
+/* =========================================
+   4. NAWIGACJA (NAVBAR)
+   ========================================= */
 .navbar {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: var(--color-bg-container) !important;
+    padding: 0.75rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1030;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+.navbar-brand {
+    color: var(--color-text-light) !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    letter-spacing: 0.05rem;
+}
+
+.nav-link-custom {
+    color: rgba(245, 247, 250, 0.7);
+    padding: 0.5rem 1rem;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.nav-link-custom:hover {
+    color: var(--color-accent-hover);
+}
+
+.nav .text-muted {
+    color: rgba(245, 247, 250, 0.65) !important;
+}
+
+.logout-link:hover {
+    color: var(--color-error) !important;
+}
+
+/* =========================================
+   5. PASEK FILTRÓW
+   ========================================= */
+.filter-bar {
+    background-color: var(--color-bg-container) !important;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    color: var(--color-text-light);
+}
+
+
+
+/* =========================================
+   6. KARTY
+   ========================================= */
 .card {
-    transition: transform 0.2s;
-    border: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    background-color: var(--color-bg-container) !important;
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    border-color: var(--color-accent-hover);
+}
+
+.card-header {
+    background-color: rgba(0,0,0,0.2) !important;
+    color: var(--color-text-light) !important;
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding: 1rem;
+}
+
+.card-img-top {
+    width: 100%;
+    object-fit: cover;
+    background-color: var(--color-border-subtle);
+}
+
+.card p,
+.card span,
+.card small {
+    color: var(--color-text-light);
+}
+
+.card .text-muted {
+    color: rgba(245, 247, 250, 0.65) !important;
+}
+
+/* =========================================
+   7. FORMULARZE
+   ========================================= */
+.form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: var(--color-text-light);
+}
+
+.form-control,
+.form-select {
+    background-color: var(--color-input-bg) !important;
+    border: 1px solid var(--color-input-border);
+    color: var(--color-text-dark);
+    padding: 0.6rem 1rem;
+    border-radius: 0.3rem;
+}
+
+.form-control::placeholder,
+.form-select::placeholder {
+    color: var(--color-text-muted);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--color-input-bg);
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 0 2px rgba(63, 169, 245, 0.25);
+    outline: none;
+}
+
+.form-check-input:checked {
+    background-color: var(--color-accent-hover) !important;
+    border-color: var(--color-accent-hover) !important;
+}
+
+/* =========================================
+   8. PRZYCISKI
+   ========================================= */
+.btn-primary,
+.btn-success {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover,
+.btn-success:hover {
+    background-color: var(--color-accent-hover) !important;
+    border-color: var(--color-accent-hover) !important;
+}
+
+.btn-outline-primary {
+    color: var(--color-text-light) !important;
+    border-color: var(--color-text-light) !important;
+    background: transparent;
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--color-text-light) !important;
+    color: var(--color-text-dark) !important;
+}
+
+/* =========================================
+   9. LINKI, ALERTY, WALIDACJA
+   ========================================= */
+a {
+    color: var(--color-accent-hover);
+    text-decoration: none;
+}
+
+.text-primary {
+    color: var(--color-accent-hover) !important;
+}
+
+.text-light{
+    color: var(--color-text-light);
+}
+
+.form-control.is-invalid {
+    border-color: var(--color-error) !important;
+}
+
+.validation-placeholder {
+    color: var(--color-error);
+    font-weight: 600;
+    font-size: 0.85rem;
+    min-height: 1.5rem;
+    margin-top: 0.25rem;
+}
+
+.alert-info {
+    background-color: #ecf0f1 !important;
+    color: var(--color-text-dark) !important;
+    border-left: 5px solid var(--color-accent);
+    border: 1px solid #bdc3c7;
 }
 
 #total-cost-display {
-    font-weight: bold;
-    color: black;
-    font-size: 1.2rem;
+    color: var(--color-accent);
+    font-weight: 800;
+    font-size: 1.8rem;
 }
 
-
-@media (max-width: 768px) {
-    .navbar-brand {
-        font-size: 1.5rem;
-    }
-
+/* =========================================
+   10. RESPONSYWNOŚĆ
+   ========================================= */
+@media (max-width: 991px) {
     .card-img-top {
-        height: 150px !important;
+        height: 200px !important;
     }
 
-    h1 {
-        font-size: 1.8rem;
-        text-align: center;
+    .navbar-collapse {
+        background-color: var(--color-bg-container);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 }
